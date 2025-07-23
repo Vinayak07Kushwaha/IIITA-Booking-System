@@ -39,16 +39,28 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (rollNumber, password) => {
     try {
-      // Ensure we're using the correct API URL
-      console.log('Making login request to:', api.defaults.baseURL);
+      console.log('Attempting login with API URL:', api.defaults.baseURL);
       
-      const response = await api.post('/auth/login', { rollNumber, password });
+      // Clear any existing tokens before login
+      localStorage.removeItem('token');
+      delete api.defaults.headers.common['Authorization'];
+      
+      const response = await api.post('/auth/login', { 
+        rollNumber, 
+        password 
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
       const { token, user } = response.data;
       
       if (!token || !user) {
         throw new Error('Invalid response from server');
       }
 
+      // Store the new token and update headers
       localStorage.setItem('token', token);
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(user);

@@ -1,7 +1,16 @@
 import axios from 'axios';
 
+// Define the API URL
+const API_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://iiit-booking-server.onrender.com/api'
+  : 'http://localhost:5001/api';
+
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'https://iiit-booking-server.onrender.com/api',
+  baseURL: API_URL,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  }
 });
 
 // Request interceptor to add token
