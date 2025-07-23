@@ -39,19 +39,48 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (rollNumber, password) => {
     try {
+      // Ensure we're using the correct API URL
+      console.log('Making login request to:', api.defaults.baseURL);
+      
       const response = await api.post('/auth/login', { rollNumber, password });
       const { token, user } = response.data;
       
+      if (!token || !user) {
+        throw new Error('Invalid response from server');
+      }
+
       localStorage.setItem('token', token);
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(user);
       
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Login failed' 
-      };
+      console.error('Login error:', error);
+      
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Server response:', error.response.data);
+        console.error('Status:', error.response.status);
+        return { 
+          success: false, 
+          message: error.response.data?.message || `Server error: ${error.response.status}`
+        };
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('No response received:', error.request);
+        return {
+          success: false,
+          message: 'No response from server. Please check your connection.'
+        };
+      } else {
+        // Something happened in setting up the request
+        console.error('Request setup error:', error.message);
+        return {
+          success: false,
+          message: 'Failed to make login request'
+        };
+      }
     }
   };
 
