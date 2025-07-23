@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: iiit-booking-server
+    env: node
+    plan: free
+    buildCommand: cd server && npm install
+    startCommand: cd server && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+    autoDeploy: true
+
+  - type: web
+    name: iiit-booking-client
+    env: node
+    plan: free
+    buildCommand: cd client && npm install && npm run build
+    startCommand: cd client && npm install -g serve && serve -s build
+    envVars:
+      - key: NODE_ENV
+        value: production
+    autoDeploy: true
