@@ -7,7 +7,10 @@ import {
   Button,
   Typography,
   Box,
-  Alert
+  Alert,
+  Divider,
+  Card,
+  CardContent
 } from '@mui/material';
 import { useAuth } from '../../context/AuthContext';
 import PageBackground from '../Common/PageBackground';
@@ -35,6 +38,11 @@ const Login = () => {
     }
     
     setLoading(false);
+  };
+
+  const handleDemoLogin = () => {
+    setRollNumber('IIT2021001');
+    setPassword('password123');
   };
 
   return (
@@ -152,6 +160,56 @@ const Login = () => {
                 {loading ? 'Signing In...' : 'Sign In to IIIT Allahabad'}
               </Button>
             </Box>
+
+            {/* Recruiter Section */}
+            <Divider sx={{ my: 3 }} />
+            
+            <Card 
+              sx={{ 
+                backgroundColor: 'rgba(33, 150, 243, 0.05)',
+                border: '1px solid rgba(33, 150, 243, 0.2)',
+                borderRadius: 2
+              }}
+            >
+              <CardContent sx={{ textAlign: 'center', py: 3 }}>
+                <Typography variant="h6" sx={{ color: 'primary.main', mb: 1, fontWeight: 'bold' }}>
+                  🎯 For Recruiters & Visitors
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+                  If you are a recruiter visiting our project, please use these demo credentials:
+                </Typography>
+                
+                <Box sx={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.8)', 
+                  p: 2, 
+                  borderRadius: 1, 
+                  mb: 2,
+                  fontFamily: 'monospace'
+                }}>
+                  <Typography variant="body2" sx={{ mb: 0.5 }}>
+                    <strong>Roll Number:</strong> IIT2021001
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Password:</strong> password123
+                  </Typography>
+                </Box>
+                
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleDemoLogin}
+                  sx={{
+                    borderRadius: 2,
+                    px: 3,
+                    '&:hover': {
+                      backgroundColor: 'rgba(33, 150, 243, 0.1)'
+                    }
+                  }}
+                >
+                  Fill Demo Credentials
+                </Button>
+              </CardContent>
+            </Card>
           </Paper>
         </Box>
       </Container>
